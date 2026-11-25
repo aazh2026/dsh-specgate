@@ -1,0 +1,33 @@
+name: Publish to npm
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      # Trusted publishing (OIDC) needs npm 11.5.1 or newer, and the npm that
+      # ships with Node 22 is still 10.x. npm 11 is the last line that supports
+      # every Node 20+/22+/24 runtime.
+      - name: Upgrade npm
+        run: npm install --global npm@11
+      # No registry token on purpose: the npmjs account has a Trusted
+      # Publisher connection for this repository and workflow, so npm
+      # authenticates with a short-lived OIDC token instead of a stored
+      # credential. Any NODE_AUTH_TOKEN in the environment would take
+      # precedence over OIDC and make the publish ask for a one-time password
+      # that CI cannot supply, so it is cleared explicitly.
+      - name: Publish
+        run: npm publish --provenance --access public --registry https://registry.npmjs.org
+        env:
+          NODE_AUTH_TOKEN: ""
