@@ -25,6 +25,7 @@
   "homepage": "https://github.com/aazh2026/dsh-specgate#readme",
   "files": [
     "src",
+    "docs",
     "cordis.patch.yml",
     "README.md",
     "LICENSE"
