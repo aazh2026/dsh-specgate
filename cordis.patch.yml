@@ -1,0 +1,17 @@
+# dsh-specgate bundle patch: mounts the specgate plugin into the host
+# composition of a dsh profile. The plugin registers its `specgate_cover`
+# tool into the shared `tools` registry so any session of the profile can
+# check requirement coverage before claiming a task is done.
+#
+# Install: `dsh plugin --profile <name> add dsh-specgate` (npm or a local
+# path). The `dsh plugin` command pnpm-installs the package into the profile
+# and reconciles it into the profile's `dsh.profile.bundles` layer list.
+- insert:
+    - id: specgate
+      # Node-resolvable package name — must stay in sync with package.json
+      # `name`.
+      name: 'dsh-specgate'
+      config:
+        # Maximum number of uncovered criteria returned by one tool call.
+        # The full count is always reported in the summary fields.
+        maxCriteria: 50

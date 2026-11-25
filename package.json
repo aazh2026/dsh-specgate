@@ -1,0 +1,58 @@
+{
+  "name": "dsh-specgate",
+  "version": "0.1.0",
+  "description": "Requirement coverage for DeepSeek Harness: scan the working directory for unproven acceptance criteria before you claim a task is done.",
+  "type": "module",
+  "main": "src/index.js",
+  "license": "MIT",
+  "private": false,
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "requirement-coverage",
+    "acceptance-criteria",
+    "spec",
+    "traceability",
+    "quality-gate"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aazh2026/dsh-specgate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aazh2026/dsh-specgate/issues"
+  },
+  "homepage": "https://github.com/aazh2026/dsh-specgate#readme",
+  "files": [
+    "src",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "lint": "node --check src/index.js"
+  },
+  "dependencies": {
+    "specgate-cli": "^0.1.7"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-tools": ">=0.2.0-rc.2 <0.3.0-0"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-tools": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=24.9.0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "devDependencies": {
+    "@deepseek-ai/dsh-tools": "^0.2.2-rc.5"
+  }
+}
