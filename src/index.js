@@ -27,12 +27,22 @@ export const name = 'specgate'
 /**
  * Only `tools` is declared here.
  *
- * `workingDirectory` is deliberately NOT in `inject`: it is owned by a
- * profile bundle, and a profile-scoped plugin that waits for a service it
- * cannot see stays `pending (waiting for service: workingDirectory)` — which
- * would take the whole plugin down instead of degrading one lookup. The
- * service is therefore read lazily through `ctx.get('workingDirectory')`, and
- * a missing service falls back to the launch directory.
+ * `workingDirectory` is deliberately NOT in `inject`. Declaring it would make
+ * the service a hard dependency: the host resolves `inject` before calling
+ * `apply()`, and an entry whose declared services never appear stays
+ * `pending (waiting for service: ...)` and is never activated — so its tool
+ * would be missing from the registry entirely, not degraded.
+ *
+ * That is not hypothetical: a plugin declaring a service nobody provides
+ * (`inject: ['tools', 'thisServiceDoesNotExist']`) never activates and its
+ * tool never registers.
+ *
+ * The service is therefore read lazily through `ctx.get('workingDirectory')`,
+ * and a missing or unavailable service falls back to the launch directory.
+ * The provider (`@deepseek-ai/dsh-working-directory`) ships in
+ * `@deepseek-ai/dsh-base`, which every profile lists first, so the lookup
+ * succeeds in practice — but the fallback keeps the tool alive in a profile
+ * that does not include it.
  */
 export const inject = ['tools']
 
